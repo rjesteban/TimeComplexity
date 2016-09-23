@@ -3,6 +3,7 @@ package math;
 public class Fraction {
     private int numerator;
     private int denominator;
+    private Fraction exponent;
 
     public Fraction() {
         this.numerator = 0;
@@ -14,15 +15,28 @@ public class Fraction {
         this.denominator = 1;
     }
     
+    public Fraction(int numerator, Fraction exponent) {
+        this.numerator = numerator;
+        this.denominator = 1;
+        this.exponent = exponent;
+    }
+
     public Fraction(int numerator, int denominator) {
         this.numerator = numerator;
         this.denominator = denominator;
+    }
+    
+    public Fraction(int numerator, int denominator, Fraction exponent) {
+        this.numerator = numerator;
+        this.denominator = denominator;
+        this.exponent = exponent;
     }
     
     public int getNumerator() { return numerator; }
     public void setNumerator(int numerator) { this.numerator = numerator; }
     public int getDenominator() { return denominator; }
     public void setDenominator(int denominator) { this.denominator = denominator; }
+    public Fraction getExponent() { return this.exponent; }
     
     private int gcd (int a, int b) {
         while (b != 0) {
@@ -40,7 +54,7 @@ public class Fraction {
         this.denominator /= gcd;
     }
     
-    private Fraction plus (Fraction f) {
+    public Fraction plus (Fraction f) {
         Fraction sum = new Fraction(
                 (this.numerator*f.denominator) + (f.numerator*this.denominator),
                 (this.denominator*f.denominator));
@@ -48,7 +62,7 @@ public class Fraction {
         return sum;
     }
 
-    private Fraction minus (Fraction f) {
+    public Fraction minus (Fraction f) {
         Fraction difference = new Fraction(
                 (this.numerator*f.denominator) - (f.numerator*this.denominator),
                 (this.denominator*f.denominator));
@@ -56,7 +70,7 @@ public class Fraction {
         return difference;
     }
     
-    private Fraction times (Fraction f) {
+    public Fraction times (Fraction f) {
         Fraction product = new Fraction(
                 (this.numerator*f.numerator),
                 (this.denominator*f.denominator));
@@ -64,11 +78,11 @@ public class Fraction {
         return product;
     }
     
-    private Fraction getReciprocal() {
+    public Fraction getReciprocal() {
         return new Fraction(this.denominator, this.numerator);
     }
     
-    private Fraction divideBy (Fraction f) {
+    public Fraction divideBy (Fraction f) {
         Fraction product = new Fraction(
                 (this.numerator*f.denominator),
                 (this.denominator*f.numerator));
@@ -78,8 +92,11 @@ public class Fraction {
     
     @Override
     public String toString() {
-        if (this.denominator != 1)
+
+        if (this.denominator != 1 && this.exponent == null)
             return this.numerator + "/" + this.denominator;
+        else if (this.denominator != 1 && this.exponent != null)
+            return "(" + this.numerator + "/" + this.denominator + ")^" + this.exponent;
         else
             return this.numerator + "";
     }

@@ -6,8 +6,6 @@
 package code;
 
 import java.util.ArrayList;
-import math.Fraction;
-import math.Monomial;
 import math.Polynomial;
 
 /**
@@ -25,6 +23,7 @@ public class DecisionStatement extends Statement {
         this.rawCode = code.trim();
         this.bodyCode = body;
         this.parseComparison();
+        this.setTime();
     }
     
     public ArrayList<Condition> getConditions() { return this.conditions; }
@@ -39,10 +38,11 @@ public class DecisionStatement extends Statement {
 
     @Override
     public void setTime() {
-        Polynomial p = new Polynomial(new Monomial(new Fraction(0)));
+        Polynomial p = new Polynomial();
         for (int i = 0; i < this.conditions.size(); i++) {
             p.add(this.conditions.get(i).getTime());
         }
+        this.time = new Polynomial(p);
     }
 
 }

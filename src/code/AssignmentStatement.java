@@ -22,6 +22,7 @@ public class AssignmentStatement extends Statement {
     public AssignmentStatement(String code) {
         this.rawCode = code.trim();
         this.splitAssignment();
+        this.setTime();
     }
     
     public DefaultStatement getLeftStatement() { return this.leftStatement; }
@@ -52,19 +53,18 @@ public class AssignmentStatement extends Statement {
                     this.rightStatement = new DefaultStatement(ar[1]);
             }
         }
-        this.setTime();
     }
 
     public String getAssignmentOp() { return this.assignmentOp;}
     
     @Override
     public void setTime() {
-        this.time = new Polynomial(new Monomial(new Fraction(0)));
+        this.time = new Polynomial();
         this.time.add(this.leftStatement.getTime());
         this.time.add(new Polynomial(new Monomial(new Fraction(1))));
         if (this.rightStatement != null)
             this.time.add(this.rightStatement.getTime());
-        //System.out.println("T(n) for " + this.rawCode + ": " + this.getTime());
+//        System.out.println("T(n) for " + this.rawCode + ": " + this.getTime());
     }
     
 }

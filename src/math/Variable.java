@@ -10,8 +10,8 @@ package math;
  * @author rj
  */
 public class Variable {
-    private final String var;
-    private final Monomial exponent;
+    private String var;
+    private Monomial exponent;
     
     public Variable(String variable, Monomial exponent) {
         this.var = variable;

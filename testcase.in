@@ -1,0 +1,51 @@
+sum=0;
+for(int i=0; i<n; i++){
+    sum = i;
+    sum = sum + 2;
+    sum += 9;
+}
+sum = 0;
+
+
+for(int i=2; i<=n; i+=3){
+    sum = i;
+    sum = sum + 2;
+    sum += 9;
+    if(sum==12)
+        sum *= 19;
+}
+if(sum==109)
+    sum = -1;
+
+for(int i=n,x=9; i>0; i--){
+    sum = i;
+    sum = sum + 2;
+    sum += 9;
+    for(int j=0; j<5; j++)
+        if(j>6)
+            sum = -1;
+    if(hello==hi && world == universe)
+        sum = never;
+}
+
+for(int i=n; i>0; i-=3){
+    sum = i;
+    sum = sum + 2;
+    sum += 9;
+}
+
+for(int i=n; i>0; i/=3){
+    sum = i;
+    sum = sum + 2;
+    sum += 9;
+}
+
+for(int i=1; i<n-3; i*=2){
+    sum = i;
+    sum = sum + 2;
+    sum += 9;
+}
+
+for(int i=0; i*i<n; i++){
+    sum = i;
+}

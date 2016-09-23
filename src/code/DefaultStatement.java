@@ -16,7 +16,7 @@ import math.Polynomial;
 public class DefaultStatement extends Statement {
     
     public DefaultStatement (String code) {
-        this.rawCode = code;
+        this.rawCode = code.trim();
         this.setTime();
     }
     
@@ -25,7 +25,7 @@ public class DefaultStatement extends Statement {
         if (type.equals("initialization")) {
             String[] token = code.split("\\s+");
             
-            this.rawCode = token.length==2? token[1]:token[0];
+            this.rawCode = token.length==2? token[1].trim():token[0].trim();
         }
         this.setTime();
     }
