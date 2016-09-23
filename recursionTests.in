@@ -1,0 +1,82 @@
+void f1(int n){
+	int x, y, z, a, b;
+	if(n>0){
+		x+=y;
+		a++;
+		b--;
+		f1(n-1);
+	}
+}
+
+void f1(int n){
+	int x, y, z, a, b;
+	if(n>0){
+		x+=y;
+		a++;
+		b--;
+		f1(n-2);
+	}
+}
+
+void f1(int n){
+	int x, y, z, a, b;
+	if(n>0){
+		x+=y;
+		a++;
+		b--;
+		f1(n-3);
+	}
+}
+
+void f1(int n){
+	int x, y, z, a, b;
+	if(n>0){
+		x+=y;
+		a++;
+		b--;
+		f1(n-10);
+	}
+}
+
+void f1(int n){
+	int x, y, z, a, b;
+	if(n>0){
+		x+=y;
+		a++;
+		b--;
+		f1(n/2);
+	}
+}
+
+void f1(int n){
+	int x, y, z, a, b;
+	if(n>0){
+		x+=y;
+		a++;
+		b--;
+		f1(n/5);
+	}
+}
+
+void f1(int n){
+	int x, y, z, a, b;
+	if(n>0){
+		x+=y;
+		a++;
+		b--;
+		f1(n/2);
+		f1(n/2);
+	}
+}
+
+void f1(int n){
+	int x, y, z, a, b;
+	if(n>0){
+		x+=y;
+		a++;
+		b--;
+		f1(n/3);
+		f1(n/3);
+		f1(n/3);
+	}
+}
