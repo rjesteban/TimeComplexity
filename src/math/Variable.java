@@ -11,13 +11,13 @@ package math;
  */
 public class Variable {
     private String var;
-    private Monomial exponent;
+    private Fraction exponent;
     
-    public Variable(String variable, Monomial exponent) {
+    public Variable(String variable, Fraction exponent) {
         this.var = variable;
         
         if (variable.matches("\\+|\\-|\\*|\\/")) {
-            this.exponent = new Monomial(new Fraction(0));
+            this.exponent = new Fraction(0);
         } else {
             this.exponent = exponent;
         }
@@ -26,23 +26,25 @@ public class Variable {
     public Variable(String variable) {
         this.var = variable;
         if (variable.matches("\\+|\\-|\\*|\\/")) {
-            this.exponent = new Monomial(new Fraction(0));
+            this.exponent = new Fraction(0);
         }
         else
-            this.exponent = new Monomial(new Fraction(1));
+            this.exponent = new Fraction(1);
     }
     
     public String getVariable() { return this.var; }
-    public Monomial getExponent() { return this.exponent; }
+    public Fraction getExponent() { return this.exponent; }
     
     @Override
     public String toString() {
-        if (this.exponent.getCoefficient().equals(new Fraction(0)) ||
-                this.exponent.getCoefficient().equals(new Fraction(1))) {
+        if (this.exponent.equals(new Fraction(1))) {
             return this.var;
         }
         else
             return this.var + "^" + this.exponent;
     }
     
+    public void setExponent(Fraction exponent) {
+        this.exponent = exponent;
+    }
 }

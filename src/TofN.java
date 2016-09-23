@@ -21,6 +21,7 @@ public class TofN {
 //        String s = Util.compress("emantestcase.in");
         
         ArrayList<Statement> blocks = Util.split(s);
+        
         int ctr = 1;
         for (Statement ss: blocks) {
             // get T(n)

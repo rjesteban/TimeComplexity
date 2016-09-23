@@ -55,7 +55,10 @@ public class Util {
                 if (m.group(2).startsWith("{")) {
                     splitShizz.add(new ForLoop(m.group(1), m.group(2).substring(1, m.group(2).length() - 1)));
                 } else {
-                    splitShizz.add(new ForLoop(m.group(1), m.group(2)));
+                    if (m.group(2).endsWith(";"))
+                        splitShizz.add(new ForLoop(m.group(1), m.group(2)));
+                    else
+                        splitShizz.add(new ForLoop(m.group(1), m.group(2).concat(";")));
                 }
             }
             
@@ -119,12 +122,4 @@ public class Util {
         }
         return codes.toArray(new String[codes.size()]);
     }
-    /*
-    public static void main(String[] args) {
-        String s = "a;b{{{lol;}}}c;d{{what;}}e{}f;";
-        String[] statements = splitString(s);
-        for (int i = 0, len = statements.length; i < len; i++) {
-            System.out.println("statement: " + statements[i]);
-        }
-    } */
 }

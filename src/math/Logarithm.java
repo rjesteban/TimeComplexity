@@ -11,16 +11,16 @@ package math;
  */
 public class Logarithm {
     // clogb(x) equals exponent y
-    private Monomial c;
+    private Term c;
     private Polynomial b;
     private Polynomial x;
 
  
-    public Monomial getConstant() { return this.c; }
+    public Term getConstant() { return this.c; }
     public Polynomial getBase() { return this.b; }
     public Polynomial getX() { return this.x; }
     
-    public void setConstant(Monomial c) { this.c = c; }
+    public void setConstant(Term c) { this.c = c; }
     public void setBase(Polynomial b) { this.b = b; }
     public void setX(Polynomial x) { this.x = x; }
     
@@ -32,7 +32,7 @@ public class Logarithm {
     }
     
     
-    public Logarithm(Monomial c, Polynomial b, Polynomial x) {
+    public Logarithm(Term c, Polynomial b, Polynomial x) {
         this.c = c;
         this.b = b;
         this.x = x;

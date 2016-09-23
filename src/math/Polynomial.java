@@ -24,43 +24,40 @@ public class Polynomial {
         this.simplify();
     }
     
-    public void sub(Polynomial p) {
+    public void subtract(Polynomial p) {
         p.negate();
         ArrayList<Term> _terms = (ArrayList<Term>)p.terms.clone();
         this.terms.addAll(_terms);
         this.simplify();
     }
     
-    public void mult(Polynomial p) { 
+    public void multiply(Polynomial p) { 
         ArrayList<Term> product = new ArrayList<Term>();
-        for (int i = 0, len = this.terms.size(); i < len; i++) {
+        
+        for (int i = 0; i < this.terms.size(); i++) {
             for (int j = 0; j < p.terms.size(); j++) {
-                Monomial l = (Monomial)this.terms.get(i);
-                Monomial m = (Monomial)p.terms.get(j);
-                System.out.println( "product =" + l + "*" + m);
-                l.times(m);
-                product.add((Term)l);
+                product.add(this.terms.get(i).clone().times(p.terms.get(j).clone()));
             }
         }
         this.terms = (ArrayList<Term>)product.clone();
+        this.simplify();
     }
     
-    public void divide(Term t) { 
+    public void divide(Polynomial p) { 
+        ArrayList<Term> quot = new ArrayList<Term>();
+        
         for (int i = 0, len = this.terms.size(); i < len; i++) {
-            if (this.terms.get(i) instanceof Monomial && t instanceof Monomial) {
-                Monomial m = (Monomial)terms.get(i);
-                m.divide(t);
+            for (int j = 0; j < p.terms.size(); j++) {
+                quot.add(this.terms.get(i).clone().divide(p.terms.get(j).clone()));
             }
         }
+        this.terms = (ArrayList<Term>)quot.clone();
     }
     
     public void negate() {
         for (int i = 0, len = terms.size(); i < len; i++) {
-            if (terms.get(i) instanceof Monomial) {
-                Monomial m = (Monomial)terms.get(i);
-                Fraction f = m.getCoefficient().times(new Fraction(-1));
-                m.setCoefficient(f);
-            }
+            Fraction f = terms.get(i).getCoefficient().times(new Fraction(-1));
+            terms.get(i).setCoefficient(f);
         }
     }
     
@@ -68,9 +65,11 @@ public class Polynomial {
     public void simplify() {
         for (int i = 0; i < this.terms.size(); i++) {
             for (int j = i + 1; j < this.terms.size(); j++) {
-                if (this.terms.get(i).isLike(this.terms.get(j))){
-                    this.terms.get(i).plus(this.terms.get(j));
+                if (this.terms.get(i).isLike(this.terms.get(j))) {
+                    this.terms.set(i, this.terms.get(i).plus(this.terms.get(j)).clone());
                     this.terms.remove(j);
+                    if (this.terms.get(i).getCoefficient().equals(new Fraction(0)))
+                        this.terms.remove(i);
                 }
             }
         }
@@ -84,7 +83,7 @@ public class Polynomial {
     
     public Polynomial () {
         this.terms = new ArrayList<Term>();
-        this.terms.add(new Monomial(new Fraction(0)));
+        this.terms.add(new Term(new Fraction(0)));
     }
     
     public Polynomial(Polynomial p) {
@@ -104,12 +103,12 @@ public class Polynomial {
             try { // if it is a number
                 int n = Integer.valueOf(sterms[i]);
                 if (i == 0)
-                    this.terms.add(new Monomial(new Fraction(n)));
+                    this.terms.add(new Term(new Fraction(n)));
                 if ((i-1 != -1) && (i - 1 != 0)) {
                     if (sterms[i-1].equals("-"))
-                        this.terms.add(new Monomial(new Fraction(-1*n)));
+                        this.terms.add(new Term(new Fraction(-1*n)));
                     else
-                        this.terms.add(new Monomial(new Fraction(n)));
+                        this.terms.add(new Term(new Fraction(n)));
                 }
                 
             } catch (NumberFormatException nfe) {
@@ -117,15 +116,15 @@ public class Polynomial {
                 if (!(sterms[i].equals("+") || sterms[i].equals("-"))) {
                     ArrayList<Variable> var = new ArrayList<Variable>();
                     if (i==0) {
-                        var.add(new Variable(sterms[i], new Monomial(new Fraction(1))));
-                        this.terms.add(new Monomial(var));
+                        var.add(new Variable(sterms[i], new Fraction(1)));
+                        this.terms.add(new Term(var));
                     }
                     else if (i - 1 != -1 && i != 0) {
                         if (sterms[i-1].equals("-"))
-                            var.add(new Variable(sterms[i], new Monomial(new Fraction(-1))));
+                            var.add(new Variable(sterms[i], new Fraction(-1)));
                         else
-                            var.add(new Variable(sterms[i], new Monomial(new Fraction(1))));
-                        this.terms.add(new Monomial(var));
+                            var.add(new Variable(sterms[i], new Fraction(1)));
+                        this.terms.add(new Term(var));
                     }
                 }
             }

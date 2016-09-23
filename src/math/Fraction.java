@@ -10,6 +10,19 @@ public class Fraction {
         this.denominator = 1;
     }
     
+    public Fraction clone() {
+        Fraction clone = new Fraction();
+        int num = this.numerator;
+        int den = this.denominator;
+        clone.setNumerator(num);
+        clone.setDenominator(den);
+        if (exponent != null)
+            clone.setExponent(new Fraction(exponent.numerator, exponent.denominator));
+        
+        
+        return clone;
+    }
+    
     public Fraction(int numerator) {
         this.numerator = numerator;
         this.denominator = 1;
@@ -49,43 +62,43 @@ public class Fraction {
     
     
     private void simplify() {
-        int gcd = this.gcd(this.numerator, this.denominator);
-        this.numerator /= gcd;
-        this.denominator /= gcd;
+        int gcd = this.gcd(this.getNumerator(), this.getDenominator());
+        this.setNumerator(this.getNumerator() / gcd);
+        this.setDenominator(this.getDenominator() / gcd);
     }
     
     public Fraction plus (Fraction f) {
         Fraction sum = new Fraction(
-                (this.numerator*f.denominator) + (f.numerator*this.denominator),
-                (this.denominator*f.denominator));
+                (this.getNumerator()*f.getDenominator()) + (f.getNumerator()*this.getDenominator()),
+                (this.getDenominator()*f.getDenominator()));
         sum.simplify();
         return sum;
     }
 
     public Fraction minus (Fraction f) {
         Fraction difference = new Fraction(
-                (this.numerator*f.denominator) - (f.numerator*this.denominator),
-                (this.denominator*f.denominator));
+                (this.getNumerator()*f.getDenominator()) - (f.getNumerator()*this.getDenominator()),
+                (this.getDenominator()*f.getDenominator()));
         difference.simplify();
         return difference;
     }
     
     public Fraction times (Fraction f) {
         Fraction product = new Fraction(
-                (this.numerator*f.numerator),
-                (this.denominator*f.denominator));
+                (this.getNumerator()*f.getNumerator()),
+                (this.getDenominator()*f.getDenominator()));
         product.simplify();
         return product;
     }
     
     public Fraction getReciprocal() {
-        return new Fraction(this.denominator, this.numerator);
+        return new Fraction(this.getDenominator(), this.getNumerator());
     }
     
     public Fraction divideBy (Fraction f) {
         Fraction product = new Fraction(
-                (this.numerator*f.denominator),
-                (this.denominator*f.numerator));
+                (this.getNumerator()*f.getDenominator()),
+                (this.getDenominator()*f.getNumerator()));
         product.simplify();
         return product;
     }
@@ -93,18 +106,25 @@ public class Fraction {
     @Override
     public String toString() {
 
-        if (this.denominator != 1 && this.exponent == null)
-            return this.numerator + "/" + this.denominator;
-        else if (this.denominator != 1 && this.exponent != null)
-            return "(" + this.numerator + "/" + this.denominator + ")^" + this.exponent;
+        if (this.getDenominator() != 1 && this.getExponent() == null)
+            return this.getNumerator() + "/" + this.getDenominator();
+        else if (this.getDenominator() != 1 && this.getExponent() != null)
+            return "(" + this.getNumerator() + "/" + this.getDenominator() + ")^" + this.getExponent();
         else
-            return this.numerator + "";
+            return this.getNumerator() + "";
     }
      
     public boolean equals(Fraction f) {
         this.simplify();
         f.simplify();
-        return (this.numerator == f.numerator && 
-                this.denominator == f.denominator);
+        return (this.getNumerator() == f.getNumerator() && 
+                this.getDenominator() == f.getDenominator());
+    }
+
+    /**
+     * @param exponent the exponent to set
+     */
+    public void setExponent(Fraction exponent) {
+        this.exponent = exponent;
     }
 }

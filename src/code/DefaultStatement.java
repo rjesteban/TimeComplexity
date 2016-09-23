@@ -6,7 +6,7 @@
 package code;
 
 import math.Fraction;
-import math.Monomial;
+import math.Term;
 import math.Polynomial;
 
 /**
@@ -35,7 +35,7 @@ public class DefaultStatement extends Statement {
         int count = Util.getMatches(rawCode, "(\\-\\-)|(\\+\\+)|\\s*(^(\\+|\\-)){0,2}\\w+").length; 
         if (count >= 1)
             count--;        
-        this.time = new Polynomial(new Monomial(new Fraction(count)));
+        this.time = new Polynomial(new Term(new Fraction(count)));
     }
     
 }

@@ -6,7 +6,7 @@
 package code;
 
 import math.Fraction;
-import math.Monomial;
+import math.Term;
 import math.Polynomial;
 
 /**
@@ -39,7 +39,7 @@ public class Condition {
         Polynomial time = this.leftStatement.getTime();
         time.add(this.rightStatement.getTime());
         if (this.comparator != null) {
-            time.add(new Polynomial(new Monomial(new Fraction(1))));
+            time.add(new Polynomial(new Term(new Fraction(1))));
         }
         return time;
     }

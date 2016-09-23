@@ -3,8 +3,6 @@ package code;
 
 import java.util.ArrayList;
 import math.Fraction;
-import math.Logarithm;
-import math.Monomial;
 import math.Polynomial;
 import math.Term;
 
@@ -120,12 +118,12 @@ public class ForLoop extends Statement {
                 // iterator value is 1 pero balihun ang sign ug ang bounds
                 if (comp.equals(">")) {
                     this.lowerBound = new Polynomial(c.getRightStatement().rawCode, false);
-                    this.lowerBound.add(new Polynomial(new Monomial(new Fraction(1))));
+                    this.lowerBound.add(new Polynomial(new Term(new Fraction(1))));
                     this.upperBound = new Polynomial(lowerB.getRightStatement().rawCode, false);
                     // System.out.println("-------" + this.lowerBound + "|" + this.upperBound + "-------");
                     
                 } else if (comp.equals(">=")) {
-                    this.lowerBound = new Polynomial(new Monomial(new Fraction(Integer.valueOf(c.getRightStatement().rawCode))));
+                    this.lowerBound = new Polynomial(new Term(new Fraction(Integer.valueOf(c.getRightStatement().rawCode))));
                     this.upperBound = new Polynomial(lowerB.getRightStatement().rawCode, false);
                     // System.out.println("-------" + this.lowerBound + "|" + this.upperBound + "-------");
                 
@@ -141,7 +139,7 @@ public class ForLoop extends Statement {
                 if (comp.equals("<")) {
                     this.lowerBound = new Polynomial(lowerB.getRightStatement().rawCode, false);
                     this.upperBound = new Polynomial(c.getRightStatement().rawCode, false);
-                    this.upperBound.sub(new Polynomial(new Monomial(new Fraction(1))));
+                    this.upperBound.subtract(new Polynomial(new Term(new Fraction(1))));
                     // System.out.println("-------" + this.lowerBound + "|" + this.upperBound + "-------");
                 } 
                 
@@ -167,21 +165,17 @@ public class ForLoop extends Statement {
                     this.lowerBound = new Polynomial(lowerB.getRightStatement().rawCode, false);
                     this.upperBound = new Polynomial(c.getRightStatement().rawCode, false);
                     Polynomial p = new Polynomial(iterator.getRightStatement().rawCode, false);
-                    this.upperBound.divide(p.getTerms().get(0));
-                    this.upperBound.sub(new Polynomial(new Monomial(new Fraction(1))));
+                    this.upperBound.subtract(new Polynomial(new Term(new Fraction(1))));
+                    this.upperBound.divide(p);
+                    System.out.println("upperrrr: " + this.upperBound);
                     // System.out.println("-------" + this.lowerBound + "|" + this.upperBound + "-------");
                 } 
                 
                 else if (comp.equals("<=")) {
-                    Polynomial lb = new Polynomial(lowerB.getRightStatement().rawCode, false);
-                    Polynomial ub = new Polynomial(c.getRightStatement().rawCode, false);
-                    Polynomial it = new Polynomial(iterator.getRightStatement().rawCode, false);
-                    if (true) {
-                        this.lowerBound = new Polynomial(lowerB.getRightStatement().rawCode, false);
-                        this.upperBound = new Polynomial(c.getRightStatement().rawCode, false);
-                        Polynomial p = new Polynomial(iterator.getRightStatement().rawCode, false);
-                        this.upperBound.divide(p.getTerms().get(0));
-                    }
+                    this.lowerBound = new Polynomial(lowerB.getRightStatement().rawCode, false);
+                    this.upperBound = new Polynomial(c.getRightStatement().rawCode, false);
+                    Polynomial p = new Polynomial(iterator.getRightStatement().rawCode, false);
+                    this.upperBound.divide(p);
                     // System.out.println("-------" + this.lowerBound + "|" + this.upperBound + "-------");
                 }
                 
@@ -194,17 +188,17 @@ public class ForLoop extends Statement {
                 String comp = c.getComparator().trim();
                 if (comp.equals(">")) {
                     this.lowerBound = new Polynomial(c.getRightStatement().rawCode, false);
-                    this.lowerBound.add(new Polynomial(new Monomial(new Fraction(1))));
+                    this.lowerBound.add(new Polynomial(new Term(new Fraction(1))));
                     this.upperBound = new Polynomial(lowerB.getRightStatement().rawCode, false);
                     Polynomial p = new Polynomial(iterator.getRightStatement().rawCode, false);
-                    this.upperBound.divide(p.getTerms().get(0));
+                    this.upperBound.divide(p);
                     // System.out.println("-------" + this.lowerBound + "|" + this.upperBound + "-------");
                     
                 } else if (comp.equals(">=")) {
-                    this.lowerBound = new Polynomial(new Monomial(new Fraction(Integer.valueOf(c.getRightStatement().rawCode))));
+                    this.lowerBound = new Polynomial(new Term(new Fraction(Integer.valueOf(c.getRightStatement().rawCode))));
                     this.upperBound = new Polynomial(lowerB.getRightStatement().rawCode, false);
                     Polynomial p = new Polynomial(iterator.getRightStatement().rawCode, false);
-                    this.upperBound.divide(p.getTerms().get(0));
+                    this.upperBound.divide(p);
                     // System.out.println("-------" + this.lowerBound + "|" + this.upperBound + "-------");
                 
                 } else {
@@ -221,13 +215,13 @@ public class ForLoop extends Statement {
                 String comp = c.getComparator().trim();
                 if (comp.equals(">")) {
                     this.lowerBound = new Polynomial(c.getRightStatement().rawCode, false);
-                    this.lowerBound.add(new Polynomial(new Monomial(new Fraction(1))));
+                    this.lowerBound.add(new Polynomial(new Term(new Fraction(1))));
                     //this.upperBound = new Polynomial(lowerB.getRightStatement().rawCode);
-                    this.upperBound = new Polynomial((Term) new Logarithm(lowerB.getRightStatement().rawCode, iterator.getRightStatement().rawCode));
+                    throw new UnsupportedOperationException("LOGS NOT SUPPORTED YET!");
                     // System.out.println("-------" + this.lowerBound + "|" + this.upperBound + "-------");
                     
                 } else if (comp.equals(">=")) {
-                    this.lowerBound = new Polynomial(new Monomial(new Fraction(Integer.valueOf(c.getRightStatement().rawCode))));
+                    this.lowerBound = new Polynomial(new Term(new Fraction(Integer.valueOf(c.getRightStatement().rawCode))));
                     this.upperBound = new Polynomial(lowerB.getRightStatement().rawCode, false);
                     // System.out.println("-------" + this.lowerBound + "|" + this.upperBound + "-------");
                 
@@ -272,9 +266,9 @@ public class ForLoop extends Statement {
     public void setTime() {
         if (upperBound != null && lowerBound != null && this.time == null) {
             Polynomial p = new Polynomial(upperBound);
-            p.sub(lowerBound);
-            p.add(new Polynomial(new Monomial(new Fraction(1))));
-            p.mult(this.insideCount);
+            p.subtract(lowerBound);
+            p.add(new Polynomial(new Term(new Fraction(1))));
+            p.multiply(this.insideCount);
             p.add(this.outsideCount);
             this.time = p;
         } else {

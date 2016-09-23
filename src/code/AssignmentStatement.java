@@ -6,7 +6,7 @@
 package code;
 
 import math.Fraction;
-import math.Monomial;
+import math.Term;
 import math.Polynomial;
 
 /**
@@ -61,7 +61,7 @@ public class AssignmentStatement extends Statement {
     public void setTime() {
         this.time = new Polynomial();
         this.time.add(this.leftStatement.getTime());
-        this.time.add(new Polynomial(new Monomial(new Fraction(1))));
+        this.time.add(new Polynomial(new Term(new Fraction(1))));
         if (this.rightStatement != null)
             this.time.add(this.rightStatement.getTime());
 //        System.out.println("T(n) for " + this.rawCode + ": " + this.getTime());
