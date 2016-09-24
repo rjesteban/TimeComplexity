@@ -1,7 +1,5 @@
-for(int i=n,x=9; i>0; i--){
+for(int i=0,x=9; i<n; i++){
     sum = i;
     sum = sum + 2;
-    sum += 9;
-    for(int j=0; j<m; j++)
-       for(int l=0; l <o; l++);
+
 }

@@ -37,12 +37,14 @@ public class Fraction {
     public Fraction(int numerator, int denominator) {
         this.numerator = numerator;
         this.denominator = denominator;
+        this.simplify();
     }
     
     public Fraction(int numerator, int denominator, Fraction exponent) {
         this.numerator = numerator;
         this.denominator = denominator;
         this.exponent = exponent;
+        this.simplify();
     }
     
     public int getNumerator() { return numerator; }

@@ -93,42 +93,73 @@ public class Polynomial {
       
 
     //if the input is a polynomial expression represented as an infix string
-    public Polynomial (String s, boolean keepConstants) {
-        this.terms = new ArrayList<>();
-        
-        String[] sterms = s.trim().split(String.format(Statement.WITH_DELIMITER, "\\+|\\-"));
-        
-        
-        for (int i = 0, len = sterms.length; i < len; i++) {
-            try { // if it is a number
-                int n = Integer.valueOf(sterms[i]);
-                if (i == 0)
-                    this.terms.add(new Term(new Fraction(n)));
-                if ((i-1 != -1) && (i - 1 != 0)) {
-                    if (sterms[i-1].equals("-"))
-                        this.terms.add(new Term(new Fraction(-1*n)));
-                    else
-                        this.terms.add(new Term(new Fraction(n)));
-                }
-                
-            } catch (NumberFormatException nfe) {
-                // assume it is only a variable, or a + or - operator
-                if (!(sterms[i].equals("+") || sterms[i].equals("-"))) {
-                    ArrayList<Variable> var = new ArrayList<Variable>();
-                    if (i==0) {
-                        var.add(new Variable(sterms[i], new Fraction(1)));
-                        this.terms.add(new Term(var));
+    public Polynomial (String string, boolean keepConstants) {
+        String[] sterms = string.split(String.format(Statement.WITH_DELIMITER, "\\+|\\-"));
+        this.terms = new ArrayList<Term>();
+        boolean prevIsAdd = false;
+        boolean prevIsSubt = false;
+        for (String s: sterms) {
+            System.out.println("--------- " + s + " ---------");
+            
+            
+            if (!(s.equals("+") || s.equals("-"))) {
+                Term t = new Term();
+                t.setCoefficient(new Fraction(1));
+
+                String[] comp = s.split(String.format(Statement.WITH_DELIMITER, "\\*|\\/"));
+                boolean prevIsDiv = false;
+                boolean prevIsMult = false;
+
+                for (String comp1 : comp) {
+                    System.out.println("comp1 is: " + comp1);
+                    if (isNumber(comp1)) {
+                        if (prevIsDiv == false && prevIsMult == false) {
+                            System.out.println("yeshere: " + Integer.valueOf(comp1));
+                            t.setCoefficient(new Fraction(Integer.valueOf(comp1)));
+                        } else {
+                            if (prevIsMult) {
+                                t.setCoefficient(t.getCoefficient().times(new Fraction(Integer.valueOf(comp1))));
+                                prevIsMult = false;
+                            } else if (prevIsDiv) {
+                                t.setCoefficient(t.getCoefficient().divideBy(new Fraction(Integer.valueOf(comp1))));
+                                prevIsDiv = false;
+                            }
+                        }
+                    } else if (comp1.charAt(0) == '/') {
+                        prevIsDiv = true;
+                    } else if (comp1.charAt(0) == '*') {
+                        prevIsMult = true;
+                    } else if (comp1.charAt(0) >= 'a' && comp1.charAt(0) <= 'z') {
+                        System.out.println("yes: " + comp1.charAt(0) + " | " + prevIsDiv + " | "  + prevIsMult);
+                        if (prevIsDiv) {
+                            System.out.println("comp1: " + comp1);
+                            t.getVariable().add(new Variable(comp1, new Fraction(-1)));
+                            prevIsDiv = false;
+                        } else if (prevIsMult) {
+                            t.getVariable().add(new Variable(comp1, new Fraction(1)));
+                            prevIsMult = false;
+                        } else{
+                            t.getVariable().add(new Variable(comp1, new Fraction(1)));
+                            System.out.println("giadd ra");
+                        }
                     }
-                    else if (i - 1 != -1 && i != 0) {
-                        if (sterms[i-1].equals("-"))
-                            var.add(new Variable(sterms[i], new Fraction(-1)));
-                        else
-                            var.add(new Variable(sterms[i], new Fraction(1)));
-                        this.terms.add(new Term(var));
-                    }
+                    System.out.println("prevIsDiv " + prevIsDiv + "| previsMult " + prevIsMult + "coef: " + t.getCoefficient());
+                    System.out.println("");
                 }
+                if (prevIsAdd) {
+                    this.terms.add(t);
+                } else if (prevIsSubt) {
+                    t.setCoefficient(t.getCoefficient().times(new Fraction(-1)));
+                    this.terms.add(t);
+                }
+            } else if (s.equals("+")) {
+                prevIsAdd = true;
+            } else if (s.equals("-")) {
+                prevIsSubt = true;
+
             }
         }
+        System.out.println("poly is : " + this.getTerms().get(0).getCoefficient() + "|" + this.getTerms().get(0).getVariable());
     }
     
 
@@ -147,5 +178,14 @@ public class Polynomial {
     }
     
     public ArrayList<Term> getTerms() { return this.terms; }
+    
+    public boolean isNumber(String s) {
+        try {
+            int i = Integer.valueOf(s);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
     
 }
