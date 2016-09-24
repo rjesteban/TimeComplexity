@@ -26,7 +26,6 @@ public class ForLoop extends Statement {
 
     public ForLoop (String code, String body) {
         this.rawCode = code;
-        System.out.println("code: " + code + "|" + body);
         this.parseForPart();
         this.body = body;
         this.setBoundaries();

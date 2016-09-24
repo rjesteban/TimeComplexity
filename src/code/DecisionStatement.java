@@ -16,10 +16,12 @@ public class DecisionStatement extends Statement {
     private ArrayList<Condition> conditions;
     private String bodyCode;
     private ArrayList<Statement> body;
+    private ArrayList<String> elseifs;
     
     
     public DecisionStatement(String code, String body) {
-        this.conditions = new ArrayList<>();
+        this.elseifs = new ArrayList<String>();
+        this.conditions = new ArrayList<Condition>();
         this.rawCode = code.trim();
         this.bodyCode = body;
         this.parseComparison();
@@ -27,6 +29,7 @@ public class DecisionStatement extends Statement {
     }
     
     public ArrayList<Condition> getConditions() { return this.conditions; }
+    public ArrayList<String> getelseIfs() { return this.elseifs; }
     
     
     private void parseComparison() {

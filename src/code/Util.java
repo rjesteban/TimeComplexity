@@ -66,10 +66,29 @@ public class Util {
             
             //====================GONNA FIX THIS IF SHIZZ====================
             else if(s.trim().startsWith("if(") || s.trim().startsWith("if (")) {
-                Pattern paren = Pattern.compile("\\((.*)\\)\\s*\\{{0,1}?(.*)\\}?");
+//                Pattern paren = Pattern.compile("\\((.*)\\)\\s*\\{{0,1}?(.*)\\}?");
+                System.out.println("what if: " + s);
+                Pattern paren = Pattern.compile("\\s*if\\s*\\(([^\\)]*)\\)\\s*\\{{0,1}?(.*)\\}?");
                 Matcher matchIf = paren.matcher(s);
-                if (matchIf.find()){
+                if (matchIf.matches()){
+                    System.out.println("if : " + matchIf.group(1));
+                    System.out.println("cond : " + matchIf.group(2));
                     splitShizz.add(new DecisionStatement(matchIf.group(1), matchIf.group(2)));
+                }
+            }
+            
+            else if(s.trim().startsWith("else if(") || s.trim().startsWith("else if (")) {
+//                Pattern paren = Pattern.compile("\\((.*)\\)\\s*\\{{0,1}?(.*)\\}?");
+                System.out.println("what if: " + s);
+                Pattern paren = Pattern.compile("\\s*else if\\s*\\(([^\\)]*)\\)\\s*\\{{0,1}?(.*)\\}?");
+                Matcher matchIf = paren.matcher(s);
+                if (matchIf.matches()){
+                    System.out.println("if : " + matchIf.group(1));
+                    System.out.println("cond : " + matchIf.group(2));
+                    //splitShizz.get(new DecisionStatement(matchIf.group(1), matchIf.group(2)));
+                    DecisionStatement cond = (DecisionStatement)splitShizz.get(splitShizz.size()-1);
+                    System.out.println("yes: " + matchIf.group(1) + matchIf.group(2));
+                    cond.getelseIfs().add(matchIf.group(1) + matchIf.group(2));
                 }
             }
             
@@ -124,19 +143,5 @@ public class Util {
         }
         return codes.toArray(new String[codes.size()]);
     }
-    
-    public static ArrayList<Variable> copyvars(ArrayList<Variable> array) {
-        ArrayList<Variable> variables = new ArrayList<Variable>();
-        for (Variable v: array)
-           variables.add(v);
-        return variables;
-    }
-    
-    public static ArrayList<Term> copyterms(ArrayList<Term> array) {
-        ArrayList<Term> terms = new ArrayList<Term>();
-        for (Term v: array)
-           terms.add(v);
-        return terms;
-    }
-    
+
 }

@@ -20,14 +20,14 @@ public class Polynomial {
     
     
     public void add(Polynomial p) {
-        ArrayList<Term> _terms = Util.copyterms(p.terms);
+        ArrayList<Term> _terms = copyterms(p.terms);
         this.terms.addAll(_terms);
         this.simplify();
     }
     
     public void subtract(Polynomial p) {
         p.negate();
-        ArrayList<Term> _terms = Util.copyterms(p.terms);
+        ArrayList<Term> _terms = copyterms(p.terms);
         this.terms.addAll(_terms);
         this.simplify();
     }
@@ -42,7 +42,7 @@ public class Polynomial {
             }
         }
         
-        this.terms = Util.copyterms(product);
+        this.terms = copyterms(product);
         this.simplify();
     }
     
@@ -54,7 +54,7 @@ public class Polynomial {
                 quot.add(this.terms.get(i).copy().divide(p.terms.get(j).copy()));
             }
         }
-        this.terms = Util.copyterms(quot);
+        this.terms = copyterms(quot);
     }
     
     public void negate() {
@@ -90,7 +90,7 @@ public class Polynomial {
     }
     
     public Polynomial(Polynomial p) {
-        this.terms = Util.copyterms(p.terms);
+        this.terms = copyterms(p.terms);
         this.evaluateable = true;
     }
       
@@ -168,7 +168,7 @@ public class Polynomial {
 
     public Polynomial copy() {
         Polynomial p = new Polynomial();
-        p.terms = Util.copyterms(this.terms);
+        p.terms = copyterms(this.terms);
         return p;
     }
     
@@ -200,8 +200,14 @@ public class Polynomial {
         Polynomial n = new Polynomial("7*n*n", false);
         Polynomial m = new Polynomial("n*n*n*n", false);
         n.divide(m);
-        System.out.println("P: " + n);
-        
-        
+        System.out.println("P: " + n);   
     }
+    
+    public static ArrayList<Term> copyterms(ArrayList<Term> array) {
+        ArrayList<Term> terms = new ArrayList<Term>();
+        for (Term v: array)
+           terms.add(v);
+        return terms;
+    }
+    
 }

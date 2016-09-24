@@ -29,8 +29,8 @@ public class Term {
     public Term copy() {
         Term m = new Term();
         m.coefficient = this.coefficient.copy();
-        ArrayList<Variable> arr = Util.copyvars(this.variable);
-        m.variable = Util.copyvars(this.variable);
+        ArrayList<Variable> arr = copyvars(this.variable);
+        m.variable = copyvars(this.variable);
         return m;
     }
     
@@ -40,16 +40,16 @@ public class Term {
     
     public Term (ArrayList<Variable> variable) {
         this.coefficient = new Fraction(1);
-        this.variable = Util.copyvars(variable);
+        this.variable = copyvars(variable);
     }
     
     public Term times(Term m) {
         Term t = this.copy();
-        ArrayList<Variable> vars = Util.copyvars(t.variable);
-        vars.addAll(Util.copyvars(m.variable));
+        ArrayList<Variable> vars = copyvars(t.variable);
+        vars.addAll(copyvars(m.variable));
         t.coefficient = this.coefficient.times(m.coefficient);      
         updateVars(vars);
-        t.variable = Util.copyvars(vars);
+        t.variable = copyvars(vars);
         return t;
     }
     
@@ -61,11 +61,11 @@ public class Term {
         for (Variable v: mm.variable)
             v.setExponent(v.getExponent().times(new Fraction(-1)));
         Term t = this.copy();
-        ArrayList<Variable> vars = Util.copyvars(t.variable);
-        vars.addAll(Util.copyvars(mm.variable));
+        ArrayList<Variable> vars = copyvars(t.variable);
+        vars.addAll(copyvars(mm.variable));
         t.coefficient = this.coefficient.divideBy(mm.coefficient);
         updateVars(vars);
-        t.variable = Util.copyvars(vars);
+        t.variable = copyvars(vars);
         return t;
     }
     
@@ -120,6 +120,13 @@ public class Term {
         vars.clear();
         for (Variable V: clonedVars)
             vars.add(new Variable(V.getVariable(), V.getExponent().copy()));
+    }
+    
+    public static ArrayList<Variable> copyvars(ArrayList<Variable> array) {
+        ArrayList<Variable> variables = new ArrayList<Variable>();
+        for (Variable v: array)
+           variables.add(v);
+        return variables;
     }
     
 }
