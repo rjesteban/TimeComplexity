@@ -21,21 +21,21 @@ public class TofN {
 //        String s = Util.compress("jacetestcase_1.in");
 //        String s = Util.compress("emantestcase.in");
         
-//        ArrayList<Statement> blocks = Util.split(s);
+        ArrayList<Statement> blocks = Util.split(s);
         
-//        int ctr = 1;
-//        for (Statement ss: blocks) {
-//            // get T(n)
-//            // System.out.println(ss.getCode());
-//            if (ss.getTime() == null)
-//                System.out.println(ctr++ + ") Infinite loop maaan!");
-//            else
-//                System.out.println(ctr++ + ") T(n) = " + ss.getTime());
-//        }
+        int ctr = 1;
+        for (Statement ss: blocks) {
+            // get T(n)
+            // System.out.println(ss.getCode());
+            if (ss.getTime() == null)
+                System.out.println(ctr++ + ") Infinite loop maaan!");
+            else
+                System.out.println(ctr++ + ") T(n) = " + ss.getTime());
+        }
 
 //        Polynomial p = new Polynomial("2n", false);
 //        System.out.println("terms: " + p.getTerms().get(0).getVariable());
-        Polynomial k = new Polynomial("i/n*34*3/6+5*n", false);
+//        Polynomial k = new Polynomial("i/n*34*3/6+5*n", false);
 //        Polynomial l = new Polynomial("n", false);
 //        p.multiply(k);
 //        p.multiply(l);

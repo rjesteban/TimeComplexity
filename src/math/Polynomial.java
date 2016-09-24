@@ -99,9 +99,7 @@ public class Polynomial {
         boolean prevIsAdd = false;
         boolean prevIsSubt = false;
         for (String s: sterms) {
-            System.out.println("--------- " + s + " ---------");
-            
-            
+            // if it is a term. evaluate and add it
             if (!(s.equals("+") || s.equals("-"))) {
                 Term t = new Term();
                 t.setCoefficient(new Fraction(1));
@@ -111,10 +109,8 @@ public class Polynomial {
                 boolean prevIsMult = false;
 
                 for (String comp1 : comp) {
-                    System.out.println("comp1 is: " + comp1);
                     if (isNumber(comp1)) {
                         if (prevIsDiv == false && prevIsMult == false) {
-                            System.out.println("yeshere: " + Integer.valueOf(comp1));
                             t.setCoefficient(new Fraction(Integer.valueOf(comp1)));
                         } else {
                             if (prevIsMult) {
@@ -130,9 +126,7 @@ public class Polynomial {
                     } else if (comp1.charAt(0) == '*') {
                         prevIsMult = true;
                     } else if (comp1.charAt(0) >= 'a' && comp1.charAt(0) <= 'z') {
-                        System.out.println("yes: " + comp1.charAt(0) + " | " + prevIsDiv + " | "  + prevIsMult);
                         if (prevIsDiv) {
-                            System.out.println("comp1: " + comp1);
                             t.getVariable().add(new Variable(comp1, new Fraction(-1)));
                             prevIsDiv = false;
                         } else if (prevIsMult) {
@@ -140,16 +134,15 @@ public class Polynomial {
                             prevIsMult = false;
                         } else{
                             t.getVariable().add(new Variable(comp1, new Fraction(1)));
-                            System.out.println("giadd ra");
                         }
                     }
-                    System.out.println("prevIsDiv " + prevIsDiv + "| previsMult " + prevIsMult + "coef: " + t.getCoefficient());
-                    System.out.println("");
                 }
                 if (prevIsAdd) {
                     this.terms.add(t);
                 } else if (prevIsSubt) {
                     t.setCoefficient(t.getCoefficient().times(new Fraction(-1)));
+                    this.terms.add(t);
+                } else {
                     this.terms.add(t);
                 }
             } else if (s.equals("+")) {
@@ -159,7 +152,6 @@ public class Polynomial {
 
             }
         }
-        System.out.println("poly is : " + this.getTerms().get(0).getCoefficient() + "|" + this.getTerms().get(0).getVariable());
     }
     
 
