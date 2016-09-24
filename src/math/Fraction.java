@@ -10,7 +10,7 @@ public class Fraction {
         this.denominator = 1;
     }
     
-    public Fraction clone() {
+    public Fraction copy() {
         Fraction clone = new Fraction();
         int num = this.numerator;
         int den = this.denominator;

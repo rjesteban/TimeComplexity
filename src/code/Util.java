@@ -14,6 +14,8 @@ import java.util.Scanner;
 import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import math.Term;
+import math.Variable;
 
 /**
  *
@@ -88,7 +90,7 @@ public class Util {
         Stack<Character> parenStack = new Stack<Character>();
         
         for (int i = 0; i < s.length(); i++) {
-            if (s.charAt(i) == ';' && (blockStack.isEmpty() && parenStack.isEmpty())) {
+            if (s.charAt(i) == ';' && line.length() > 0 && (blockStack.isEmpty() && parenStack.isEmpty())) {
                 codes.add(line.trim());
                 line = "";
             } else if (s.charAt(i) == ';' && !blockStack.isEmpty()) {
@@ -122,4 +124,19 @@ public class Util {
         }
         return codes.toArray(new String[codes.size()]);
     }
+    
+    public static ArrayList<Variable> copyvars(ArrayList<Variable> array) {
+        ArrayList<Variable> variables = new ArrayList<Variable>();
+        for (Variable v: array)
+           variables.add(v);
+        return variables;
+    }
+    
+    public static ArrayList<Term> copyterms(ArrayList<Term> array) {
+        ArrayList<Term> terms = new ArrayList<Term>();
+        for (Term v: array)
+           terms.add(v);
+        return terms;
+    }
+    
 }

@@ -1,6 +1,7 @@
 package math;
 
 import code.Statement;
+import code.Util;
 import java.util.ArrayList;
 
 /*
@@ -19,14 +20,14 @@ public class Polynomial {
     
     
     public void add(Polynomial p) {
-        ArrayList<Term> _terms = (ArrayList<Term>)p.terms.clone();
+        ArrayList<Term> _terms = Util.copyterms(p.terms);
         this.terms.addAll(_terms);
         this.simplify();
     }
     
     public void subtract(Polynomial p) {
         p.negate();
-        ArrayList<Term> _terms = (ArrayList<Term>)p.terms.clone();
+        ArrayList<Term> _terms = Util.copyterms(p.terms);
         this.terms.addAll(_terms);
         this.simplify();
     }
@@ -36,10 +37,12 @@ public class Polynomial {
         
         for (int i = 0; i < this.terms.size(); i++) {
             for (int j = 0; j < p.terms.size(); j++) {
-                product.add(this.terms.get(i).clone().times(p.terms.get(j).clone()));
+                Term t = this.terms.get(i).copy().times(p.terms.get(j).copy());
+                product.add(t);
             }
         }
-        this.terms = (ArrayList<Term>)product.clone();
+        
+        this.terms = Util.copyterms(product);
         this.simplify();
     }
     
@@ -48,10 +51,10 @@ public class Polynomial {
         
         for (int i = 0, len = this.terms.size(); i < len; i++) {
             for (int j = 0; j < p.terms.size(); j++) {
-                quot.add(this.terms.get(i).clone().divide(p.terms.get(j).clone()));
+                quot.add(this.terms.get(i).copy().divide(p.terms.get(j).copy()));
             }
         }
-        this.terms = (ArrayList<Term>)quot.clone();
+        this.terms = Util.copyterms(quot);
     }
     
     public void negate() {
@@ -66,7 +69,7 @@ public class Polynomial {
         for (int i = 0; i < this.terms.size(); i++) {
             for (int j = i + 1; j < this.terms.size(); j++) {
                 if (this.terms.get(i).isLike(this.terms.get(j))) {
-                    this.terms.set(i, this.terms.get(i).plus(this.terms.get(j)).clone());
+                    this.terms.set(i, this.terms.get(i).plus(this.terms.get(j)).copy());
                     this.terms.remove(j);
                     if (this.terms.get(i).getCoefficient().equals(new Fraction(0)))
                         this.terms.remove(i);
@@ -87,13 +90,14 @@ public class Polynomial {
     }
     
     public Polynomial(Polynomial p) {
-        this.terms = (ArrayList<Term>)p.terms.clone();
+        this.terms = Util.copyterms(p.terms);
         this.evaluateable = true;
     }
       
 
     //if the input is a polynomial expression represented as an infix string
     public Polynomial (String string, boolean keepConstants) {
+        string = string.replaceAll("\\s", "");
         String[] sterms = string.split(String.format(Statement.WITH_DELIMITER, "\\+|\\-"));
         this.terms = new ArrayList<Term>();
         boolean prevIsAdd = false;
@@ -137,6 +141,9 @@ public class Polynomial {
                         }
                     }
                 }
+                
+                Term.updateVars(t.getVariable());
+               
                 if (prevIsAdd) {
                     this.terms.add(t);
                 } else if (prevIsSubt) {
@@ -145,7 +152,12 @@ public class Polynomial {
                 } else {
                     this.terms.add(t);
                 }
-            } else if (s.equals("+")) {
+            } 
+            
+            
+            
+            
+            else if (s.equals("+")) {
                 prevIsAdd = true;
             } else if (s.equals("-")) {
                 prevIsSubt = true;
@@ -153,8 +165,12 @@ public class Polynomial {
             }
         }
     }
-    
 
+    public Polynomial copy() {
+        Polynomial p = new Polynomial();
+        p.terms = Util.copyterms(this.terms);
+        return p;
+    }
     
     @Override
     public String toString() {
@@ -180,4 +196,12 @@ public class Polynomial {
         }
     }
     
+    public static void main(String[] args) {
+        Polynomial n = new Polynomial("7*n*n", false);
+        Polynomial m = new Polynomial("n*n*n*n", false);
+        n.divide(m);
+        System.out.println("P: " + n);
+        
+        
+    }
 }

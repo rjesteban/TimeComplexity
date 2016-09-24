@@ -33,11 +33,13 @@ public class TofN {
                 System.out.println(ctr++ + ") T(n) = " + ss.getTime());
         }
 
-//        Polynomial p = new Polynomial("2n", false);
-//        System.out.println("terms: " + p.getTerms().get(0).getVariable());
 //        Polynomial k = new Polynomial("i/n*34*3/6+5*n", false);
-//        Polynomial l = new Polynomial("n", false);
-//        p.multiply(k);
+//        Polynomial l = new Polynomial("n-n*n", false);
+//        System.out.println("k bef: " + k);
+//        l.simplify();
+//        System.out.println("l bef: " + l);
+//        k.multiply(l);
+//        System.out.println("k: " + k);
 //        p.multiply(l);
 //        System.out.println("p: " + p);
     }

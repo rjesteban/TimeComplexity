@@ -5,6 +5,7 @@
  */
 package math;
 
+import code.Util;
 import java.util.ArrayList;
 
 /**
@@ -25,10 +26,11 @@ public class Term {
         this.variable = new ArrayList<Variable>();
     }
     
-    public Term clone() {
+    public Term copy() {
         Term m = new Term();
-        m.coefficient = this.coefficient.clone();
-        m.variable = (ArrayList<Variable>)this.variable.clone();
+        m.coefficient = this.coefficient.copy();
+        ArrayList<Variable> arr = Util.copyvars(this.variable);
+        m.variable = Util.copyvars(this.variable);
         return m;
     }
     
@@ -38,37 +40,32 @@ public class Term {
     
     public Term (ArrayList<Variable> variable) {
         this.coefficient = new Fraction(1);
-        this.variable = (ArrayList<Variable>)variable.clone();
+        this.variable = Util.copyvars(variable);
     }
     
     public Term times(Term m) {
-        Term t = this.clone();
-        ArrayList<Variable> vars = (ArrayList<Variable>)t.variable.clone();
-        vars.addAll((ArrayList<Variable>)m.variable.clone());
-        
-        t.coefficient = this.coefficient.times(m.coefficient);
-        
-        
-        // check similar variables and add their exponents, remove the other one
-        for (int i = 0; i < vars.size(); i++) {
-            for (int j = i + 1; j < vars.size(); j++) {
-                // same var, add exponent. remove the other
-                if (vars.get(i).getVariable().equals(vars.get(j).getVariable())) {   
-                    Fraction f = vars.get(i).getExponent().plus(vars.get(j).getExponent());
-                    vars.get(i).setExponent(f);
-                    vars.remove(j);
-                }
-            }
-        }
-        t.variable = (ArrayList<Variable>)vars.clone();
+        Term t = this.copy();
+        ArrayList<Variable> vars = Util.copyvars(t.variable);
+        vars.addAll(Util.copyvars(m.variable));
+        t.coefficient = this.coefficient.times(m.coefficient);      
+        updateVars(vars);
+        t.variable = Util.copyvars(vars);
         return t;
     }
     
     public Term divide(Term m) {
         //it is a coefficient
-        Term t = this.clone();
-        t.coefficient = this.coefficient.divideBy(m.coefficient);
-        System.out.println("this neeeedss upppddaaaatteeeeee " + t.coefficient);
+        Term mm = m.copy();
+        
+        //negate all terms' exponents
+        for (Variable v: mm.variable)
+            v.setExponent(v.getExponent().times(new Fraction(-1)));
+        Term t = this.copy();
+        ArrayList<Variable> vars = Util.copyvars(t.variable);
+        vars.addAll(Util.copyvars(mm.variable));
+        t.coefficient = this.coefficient.divideBy(mm.coefficient);
+        updateVars(vars);
+        t.variable = Util.copyvars(vars);
         return t;
     }
     
@@ -80,7 +77,7 @@ public class Term {
             for (int i = 0; i < this.variable.size(); i++) {
                 variables += this.variable.get(i).toString();
             }
-        if (this.coefficient.equals(new Fraction(1)) || this.coefficient.equals(new Fraction(-1))) {
+        if (this.coefficient.equals(new Fraction(1))) {
             if (variables.equals(""))
                 return this.coefficient.toString();
             else {
@@ -102,9 +99,27 @@ public class Term {
     }
 
     public boolean isLike(Term t) {
-        boolean b = this.variable.equals(t.variable);
+        boolean b = this.variable.toString().equals(t.variable.toString());
         return b;
     }
    
+    public static void updateVars(ArrayList<Variable> vars) {
+        ArrayList<Variable> clonedVars = new ArrayList<Variable>();
+        for (Variable V: vars)
+            clonedVars.add(new Variable(V.getVariable(), V.getExponent().copy()));
+        for (int i = 0; i < clonedVars.size(); i++) {
+            for (int j = i  + 1; j < clonedVars.size(); j++) {
+                if (clonedVars.get(i).getVariable().equals(clonedVars.get(j).getVariable())) {
+                    clonedVars.get(i).setExponent(clonedVars.get(i).getExponent().plus(clonedVars.get(j).getExponent()));
+                    if (clonedVars.remove(j) != null) 
+                        j--;
+                }    
+            }
+        }
+        
+        vars.clear();
+        for (Variable V: clonedVars)
+            vars.add(new Variable(V.getVariable(), V.getExponent().copy()));
+    }
     
 }
