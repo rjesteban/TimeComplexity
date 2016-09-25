@@ -13,17 +13,20 @@ import java.util.ArrayList;
  * @author rj
  */
 public class Term {
-    private Fraction coefficient;
-    private ArrayList<Variable> variable;
+    protected Fraction coefficient;
+    protected ArrayList<Variable> variable;
+    protected String TYPE;
     
     public Term (Fraction coefficient) {
         this.coefficient = coefficient;
         this.variable = new ArrayList<>();
+        this.TYPE = "norm";
     }
     
     public Term() {
         this.coefficient = new Fraction(0);
         this.variable = new ArrayList<Variable>();
+        this.TYPE = "norm";
     }
     
     public Term copy() {
@@ -37,10 +40,14 @@ public class Term {
     public Fraction getCoefficient() { return this.coefficient; }
     public void setCoefficient(Fraction coefficient) { this.coefficient = coefficient; }
     public ArrayList<Variable> getVariable() { return this.variable; }
+    public void setVariable(ArrayList<Variable> vars) { 
+        this.variable = Term.copyvars(vars);
+    }
     
     public Term (ArrayList<Variable> variable) {
         this.coefficient = new Fraction(1);
         this.variable = copyvars(variable);
+        this.TYPE = "norm";
     }
     
     public Term times(Term m) {
