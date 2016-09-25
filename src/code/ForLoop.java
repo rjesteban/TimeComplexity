@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import math.Fraction;
 import math.Polynomial;
 import math.Term;
+import math.Variable;
 
 public class ForLoop extends Statement {
     private ForLoop parent;
@@ -137,15 +138,51 @@ public class ForLoop extends Statement {
                 // iterator value is 1 pero balihun ang sign ug ang bounds
                 
                 if (comp.equals("<")) {
+                    if (c.getLeftStatement().rawcode.contains("*")
+                        ) {
+                        
+                        Polynomial upper = new Polynomial(c.getLeftStatement().rawcode, false).substituteVar(
+                                c.getRightStatement().rawcode.trim()
+                        );
+                        
+                        this.upperBound = upper.copy();
+                        for(Term t:this.upperBound.getTerms()) {
+                            for (Variable v:t.getVariable()){
+                                v.setExponent(v.getExponent().getReciprocal());
+                            }
+                        }
+                        this.lowerBound = new Polynomial(lowerB.getRightStatement().rawcode, false);
+                        this.upperBound.subtract(new Polynomial(new Term(new Fraction(1))));
+                    
+                    } else {
                     this.lowerBound = new Polynomial(lowerB.getRightStatement().rawcode, false);
                     this.upperBound = new Polynomial(c.getRightStatement().rawcode, false);
                     this.upperBound.subtract(new Polynomial(new Term(new Fraction(1))));
+                    }
+                    
                     // System.out.println("-------" + this.lowerBound + "|" + this.upperBound + "-------");
                 } 
                 
                 else if (comp.equals("<=")) {
+                    if (c.getLeftStatement().rawcode.contains("*")
+                        ) {
+                        
+                        Polynomial upper = new Polynomial(c.getLeftStatement().rawcode, false).substituteVar(
+                                c.getRightStatement().rawcode.trim()
+                        );
+                        
+                        this.upperBound = upper.copy();
+                        for(Term t:this.upperBound.getTerms()) {
+                            for (Variable v:t.getVariable()){
+                                v.setExponent(v.getExponent().getReciprocal());
+                            }
+                        }
+                        this.lowerBound = new Polynomial(lowerB.getRightStatement().rawcode, false);
+                    
+                    } else {
                     this.lowerBound = new Polynomial(lowerB.getRightStatement().rawcode, false);
                     this.upperBound = new Polynomial(c.getRightStatement().rawcode, false);
+                    }
                     // System.out.println("-------" + this.lowerBound + "|" + this.upperBound + "-------");
                 }
                 
@@ -167,7 +204,6 @@ public class ForLoop extends Statement {
                     Polynomial p = new Polynomial(iterator.getRightStatement().rawcode, false);
                     this.upperBound.subtract(new Polynomial(new Term(new Fraction(1))));
                     this.upperBound.divide(p);
-                    System.out.println("upperrrr: " + this.upperBound);
                     // System.out.println("-------" + this.lowerBound + "|" + this.upperBound + "-------");
                 } 
                 
@@ -176,7 +212,7 @@ public class ForLoop extends Statement {
                     this.upperBound = new Polynomial(c.getRightStatement().rawcode, false);
                     Polynomial p = new Polynomial(iterator.getRightStatement().rawcode, false);
                     this.upperBound.divide(p);
-                    // System.out.println("-------" + this.lowerBound + "|" + this.upperBound + "-------");
+//                     System.out.println("-------" + this.lowerBound + "|" + this.upperBound + "-------");
                 }
                 
                 
@@ -244,7 +280,17 @@ public class ForLoop extends Statement {
     private Condition findMatchingCondition(String s) {
         ArrayList<Condition> conditions = this.stoppingCondition.getConditions();
         for (int i = 0; i < conditions.size(); i++) {
-            if (s.equals(conditions.get(i).getLeftStatement().rawcode))
+            String match = conditions.get(i).getLeftStatement().rawcode.trim();
+            
+            if (match.contains("*"))
+                System.out.println(match);
+            
+            if (s.contains(String.valueOf(
+                    conditions.get(i).getLeftStatement().rawcode.trim().
+                            replaceAll("\\*|\\+|\\-|\\/", "").charAt(0)
+                                        )
+                            )
+                    )
                 return conditions.get(i);
         }
         return null;

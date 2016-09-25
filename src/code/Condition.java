@@ -20,9 +20,10 @@ public class Condition {
     private String code;
     
     public Condition(String code) {
+        code = code.replaceAll("\\s","");
         this.code = code;
         String[] statements = Util.getMatches(code,"[\\w-+/*()\\[\\]]+|==|!=|<=|>=|>|<");
-        this.leftStatement = new DefaultStatement(statements[0]);
+        this.leftStatement = new DefaultStatement(statements[0].replaceFirst("\\s", ""));
         if (statements.length == 3) {
             this.comparator = statements[1];
             this.rightStatement = new DefaultStatement(statements[2]);

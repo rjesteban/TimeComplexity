@@ -47,4 +47,8 @@ public class Variable {
     public void setExponent(Fraction exponent) {
         this.exponent = exponent;
     }
+    
+    public void setVariable(String s) {
+        this.var = s;
+    }
 }

@@ -17,8 +17,8 @@ import math.Polynomial;
  */
 public class TofN {
     public static void main(String[] args) throws FileNotFoundException {
-        String s = Util.compress("file.in.txt");
-//        String s = Util.compress("jacetestcase_1.in");
+//        String s = Util.compress("file.in.txt");
+        String s = Util.compress("jacetestcase_1.in");
 //        String s = Util.compress("emantestcase.in");
         
         ArrayList<Statement> blocks = Util.split(s);
@@ -26,21 +26,10 @@ public class TofN {
         int ctr = 1;
         for (Statement ss: blocks) {
             // get T(n)
-            // System.out.println(ss.getCode());
             if (ss.getTime() == null)
                 System.out.println(ctr++ + ") Infinite loop maaan!");
             else
                 System.out.println(ctr++ + ") T(n) = " + ss.getTime());
         }
-
-//        Polynomial k = new Polynomial("i/n*34*3/6+5*n", false);
-//        Polynomial l = new Polynomial("n-n*n", false);
-//        System.out.println("k bef: " + k);
-//        l.simplify();
-//        System.out.println("l bef: " + l);
-//        k.multiply(l);
-//        System.out.println("k: " + k);
-//        p.multiply(l);
-//        System.out.println("p: " + p);
     }
 }

@@ -69,7 +69,10 @@ public class Util {
                 Pattern paren = Pattern.compile("\\s*if\\s*\\(([^\\)]*)\\)\\s*\\{{0,1}?(.*)\\}?");
                 Matcher matchIf = paren.matcher(s);
                 if (matchIf.matches()){
-                    splitShizz.add(new DecisionStatement(matchIf.group(1), matchIf.group(2)));
+                    if (matchIf.group(2).startsWith("{") && matchIf.group(2).startsWith("}"))
+                        splitShizz.add(new DecisionStatement(matchIf.group(1), matchIf.group(2)));
+                    else
+                        splitShizz.add(new DecisionStatement(matchIf.group(1), matchIf.group(2)+";"));
                 }
             }
             

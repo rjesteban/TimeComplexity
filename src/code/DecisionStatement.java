@@ -41,19 +41,17 @@ public class DecisionStatement extends Statement {
     @Override
     public void setTime() {
         Polynomial ifstmt = new Polynomial();
-        System.out.println("timeinit: " + ifstmt);
         for (int i = 0; i < this.conditions.size(); i++) {
-            System.out.println("000");
             ifstmt.add(this.conditions.get(i).getTime());
         }
-        System.out.println("timebef: " + ifstmt);
+        
         if (!this.bodyCode.equals("{}")) {
             ArrayList<Statement> ifbody = Util.split(this.bodyCode);
-            for (Statement ifbodystatement: ifbody)
+            for (Statement ifbodystatement: ifbody) {
                 ifstmt.add(ifbodystatement.getTime());
-            System.out.println("time: " + ifstmt);
+            }
         }
-        this.time = new Polynomial(ifstmt);
+        this.time = ifstmt.copy();
     }
 
 }

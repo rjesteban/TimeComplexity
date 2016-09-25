@@ -59,7 +59,7 @@ public class AssignmentStatement extends Statement {
     
     @Override
     public void setTime() {
-        System.out.println("aw: " + rawcode);
+        
         this.time = new Polynomial();
         this.time.add(this.leftStatement.getTime());
         

@@ -222,4 +222,14 @@ public class Polynomial {
         return terms;
     }
     
+    public Polynomial substituteVar(String replacement) {
+        Polynomial p = this.copy();
+        for (Term t: p.terms) {
+            for (Variable v: t.getVariable()) {
+                v.setVariable(replacement);
+            }
+        }
+        return p;
+    }
+    
 }
