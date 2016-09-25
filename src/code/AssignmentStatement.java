@@ -20,7 +20,7 @@ public class AssignmentStatement extends Statement {
     
     
     public AssignmentStatement(String code) {
-        this.rawCode = code.trim();
+        this.rawcode = code.trim();
         this.splitAssignment();
         this.setTime();
     }
@@ -29,25 +29,25 @@ public class AssignmentStatement extends Statement {
     public DefaultStatement getRightStatement() { return this.rightStatement; }
     
     private void splitAssignment() {
-        String[] tokens = rawCode.split(String.format(WITH_DELIMITER, "-=|\\+=|\\/=|\\*="));
+        String[] tokens = rawcode.split(String.format(WITH_DELIMITER, "-=|\\+=|\\/=|\\*="));
         if (tokens.length >1) {
             int length = tokens.length;
             this.leftStatement = new DefaultStatement(tokens[0]);
             this.assignmentOp = tokens[1];
             this.rightStatement = new DefaultStatement(tokens[2]);
         } else {
-            int equals = this.rawCode.indexOf("=");
+            int equals = this.rawcode.indexOf("=");
             if (equals !=-1) {
-                char next = rawCode.charAt(equals+1);
+                char next = rawcode.charAt(equals+1);
                 if (next != '=') {
                     this.assignmentOp = "=";
-                    this.leftStatement = new DefaultStatement(this.rawCode.substring(0,equals), "initialization");
-                    this.rightStatement = new DefaultStatement(this.rawCode.substring(equals+1, this.rawCode.length()));
+                    this.leftStatement = new DefaultStatement(this.rawcode.substring(0,equals), "initialization");
+                    this.rightStatement = new DefaultStatement(this.rawcode.substring(equals+1, this.rawcode.length()));
                 } else {
-                    this.leftStatement = new DefaultStatement(this.rawCode);
+                    this.leftStatement = new DefaultStatement(this.rawcode);
                 }
             } else {
-                String[] ar = rawCode.split(String.format(WITH_DELIMITER, "\\+\\+|\\-\\-"));
+                String[] ar = rawcode.split(String.format(WITH_DELIMITER, "\\+\\+|\\-\\-"));
                 this.leftStatement = new DefaultStatement(ar[0]);
                 if (ar.length > 1)
                     this.rightStatement = new DefaultStatement(ar[1]);
@@ -59,9 +59,14 @@ public class AssignmentStatement extends Statement {
     
     @Override
     public void setTime() {
+        System.out.println("aw: " + rawcode);
         this.time = new Polynomial();
         this.time.add(this.leftStatement.getTime());
-        this.time.add(new Polynomial(new Term(new Fraction(1))));
+        
+//        if (!(this.rawCode.contains("{") || this.rawCode.contains("}")))
+            this.time.add(new Polynomial(new Term(new Fraction(1))));
+            
+        
         if (this.rightStatement != null)
             this.time.add(this.rightStatement.getTime());
 //        System.out.println("T(n) for " + this.rawCode + ": " + this.getTime());

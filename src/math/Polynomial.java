@@ -71,7 +71,7 @@ public class Polynomial {
                 if (this.terms.get(i).isLike(this.terms.get(j))) {
                     this.terms.set(i, this.terms.get(i).plus(this.terms.get(j)).copy());
                     this.terms.remove(j);
-                    if (this.terms.get(i).getCoefficient().equals(new Fraction(0)))
+                    if (this.terms.get(i).getCoefficient().equals(new Fraction(0)) && !this.terms.get(i).getVariable().isEmpty())
                         this.terms.remove(i);
                 }
             }
@@ -175,7 +175,9 @@ public class Polynomial {
     @Override
     public String toString() {
         String string = "";
-        
+        if (this.terms.isEmpty()) {
+            return this.terms.get(0).toString();
+        }
         for (int i = 0, len = this.terms.size(); i < len; i++) {
             string += this.terms.get(i).toString() + "";
             if (i < len - 1)
@@ -197,10 +199,20 @@ public class Polynomial {
     }
     
     public static void main(String[] args) {
-        Polynomial n = new Polynomial("7*n*n", false);
+        Polynomial o = new Polynomial("1/n", false);
+        o.simplify();
+        System.out.println("ooooo: " + o);
+        Polynomial n = new Polynomial("7", false);
         Polynomial m = new Polynomial("n*n*n*n", false);
         n.divide(m);
         System.out.println("P: " + n);   
+        String s = "";
+        System.out.println(">>>" + s.length() + " | " + s.equals(""));
+        
+        {
+            String w = "l";
+        }
+        
     }
     
     public static ArrayList<Term> copyterms(ArrayList<Term> array) {

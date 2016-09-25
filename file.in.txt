@@ -1,8 +1,5 @@
 if (i == 3) {
+    sum += 2;
     sum += 3;
-    sum--;
-}
-else if (n==4){
-    n =4;
-    f = 3;
-}
+} else
+    sum = 4;

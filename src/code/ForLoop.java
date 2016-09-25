@@ -25,7 +25,7 @@ public class ForLoop extends Statement {
     // private int insideCount; // includes stopping condition only
 
     public ForLoop (String code, String body) {
-        this.rawCode = code;
+        this.rawcode = code;
         this.parseForPart();
         this.body = body;
         this.setBoundaries();
@@ -34,7 +34,7 @@ public class ForLoop extends Statement {
     }
     
     private void parseForPart() {
-        String[] tokens = this.rawCode.split("\\s*;\\s*");
+        String[] tokens = this.rawcode.split("\\s*;\\s*");
         
         String[] initializations = tokens[0].split("\\s*,\\s*");
         this.initializationStatements = new AssignmentStatement[initializations.length];
@@ -43,7 +43,7 @@ public class ForLoop extends Statement {
             this.initializationStatements[i] = new AssignmentStatement(initializations[i]);
         }
         
-        this.stoppingCondition = new DecisionStatement(tokens[1], null);
+        this.stoppingCondition = new DecisionStatement(tokens[1], "");
         
         String[] iterations = tokens[2].split("\\s*,\\s*");
         this.iterationStatements = new AssignmentStatement[iterations.length];
@@ -89,14 +89,14 @@ public class ForLoop extends Statement {
         AssignmentStatement iterator = null;
         for (int i = 0, len = this.initializationStatements.length; i < len; i++) {
             AssignmentStatement as = this.initializationStatements[i];
-            Condition c = findMatchingCondition(as.getLeftStatement().rawCode);
+            Condition c = findMatchingCondition(as.getLeftStatement().rawcode);
             if (c != null ){
                 upperB = c;
                 lowerB = as;
                 break;
             }
         }
-        iterator = this.findIteration(lowerB.getLeftStatement().rawCode.trim());
+        iterator = this.findIteration(lowerB.getLeftStatement().rawcode.trim());
         
         // evaluate upper bound  
         evaluateUpperBound(lowerB, upperB, iterator);
@@ -111,20 +111,20 @@ public class ForLoop extends Statement {
         
         if (assignment == null) {
             // case when ++ or --
-            String rightStatement = iterator.getRightStatement().rawCode.trim();
+            String rightStatement = iterator.getRightStatement().rawcode.trim();
             if (rightStatement.equals("--")) {
                 // BALI MANI
                 String comp = c.getComparator().trim();
                 // iterator value is 1 pero balihun ang sign ug ang bounds
                 if (comp.equals(">")) {
-                    this.lowerBound = new Polynomial(c.getRightStatement().rawCode, false);
+                    this.lowerBound = new Polynomial(c.getRightStatement().rawcode, false);
                     this.lowerBound.add(new Polynomial(new Term(new Fraction(1))));
-                    this.upperBound = new Polynomial(lowerB.getRightStatement().rawCode, false);
+                    this.upperBound = new Polynomial(lowerB.getRightStatement().rawcode, false);
                     // System.out.println("-------" + this.lowerBound + "|" + this.upperBound + "-------");
                     
                 } else if (comp.equals(">=")) {
-                    this.lowerBound = new Polynomial(new Term(new Fraction(Integer.valueOf(c.getRightStatement().rawCode))));
-                    this.upperBound = new Polynomial(lowerB.getRightStatement().rawCode, false);
+                    this.lowerBound = new Polynomial(new Term(new Fraction(Integer.valueOf(c.getRightStatement().rawcode))));
+                    this.upperBound = new Polynomial(lowerB.getRightStatement().rawcode, false);
                     // System.out.println("-------" + this.lowerBound + "|" + this.upperBound + "-------");
                 
                 } else {
@@ -137,15 +137,15 @@ public class ForLoop extends Statement {
                 // iterator value is 1 pero balihun ang sign ug ang bounds
                 
                 if (comp.equals("<")) {
-                    this.lowerBound = new Polynomial(lowerB.getRightStatement().rawCode, false);
-                    this.upperBound = new Polynomial(c.getRightStatement().rawCode, false);
+                    this.lowerBound = new Polynomial(lowerB.getRightStatement().rawcode, false);
+                    this.upperBound = new Polynomial(c.getRightStatement().rawcode, false);
                     this.upperBound.subtract(new Polynomial(new Term(new Fraction(1))));
                     // System.out.println("-------" + this.lowerBound + "|" + this.upperBound + "-------");
                 } 
                 
                 else if (comp.equals("<=")) {
-                    this.lowerBound = new Polynomial(lowerB.getRightStatement().rawCode, false);
-                    this.upperBound = new Polynomial(c.getRightStatement().rawCode, false);
+                    this.lowerBound = new Polynomial(lowerB.getRightStatement().rawcode, false);
+                    this.upperBound = new Polynomial(c.getRightStatement().rawcode, false);
                     // System.out.println("-------" + this.lowerBound + "|" + this.upperBound + "-------");
                 }
                 
@@ -162,9 +162,9 @@ public class ForLoop extends Statement {
                 // iterator value is 1 pero balihun ang sign ug ang bounds
                 
                 if (comp.equals("<")) {
-                    this.lowerBound = new Polynomial(lowerB.getRightStatement().rawCode, false);
-                    this.upperBound = new Polynomial(c.getRightStatement().rawCode, false);
-                    Polynomial p = new Polynomial(iterator.getRightStatement().rawCode, false);
+                    this.lowerBound = new Polynomial(lowerB.getRightStatement().rawcode, false);
+                    this.upperBound = new Polynomial(c.getRightStatement().rawcode, false);
+                    Polynomial p = new Polynomial(iterator.getRightStatement().rawcode, false);
                     this.upperBound.subtract(new Polynomial(new Term(new Fraction(1))));
                     this.upperBound.divide(p);
                     System.out.println("upperrrr: " + this.upperBound);
@@ -172,9 +172,9 @@ public class ForLoop extends Statement {
                 } 
                 
                 else if (comp.equals("<=")) {
-                    this.lowerBound = new Polynomial(lowerB.getRightStatement().rawCode, false);
-                    this.upperBound = new Polynomial(c.getRightStatement().rawCode, false);
-                    Polynomial p = new Polynomial(iterator.getRightStatement().rawCode, false);
+                    this.lowerBound = new Polynomial(lowerB.getRightStatement().rawcode, false);
+                    this.upperBound = new Polynomial(c.getRightStatement().rawcode, false);
+                    Polynomial p = new Polynomial(iterator.getRightStatement().rawcode, false);
                     this.upperBound.divide(p);
                     // System.out.println("-------" + this.lowerBound + "|" + this.upperBound + "-------");
                 }
@@ -187,17 +187,17 @@ public class ForLoop extends Statement {
             } else if (assignment.equals("-=")) {
                 String comp = c.getComparator().trim();
                 if (comp.equals(">")) {
-                    this.lowerBound = new Polynomial(c.getRightStatement().rawCode, false);
+                    this.lowerBound = new Polynomial(c.getRightStatement().rawcode, false);
                     this.lowerBound.add(new Polynomial(new Term(new Fraction(1))));
-                    this.upperBound = new Polynomial(lowerB.getRightStatement().rawCode, false);
-                    Polynomial p = new Polynomial(iterator.getRightStatement().rawCode, false);
+                    this.upperBound = new Polynomial(lowerB.getRightStatement().rawcode, false);
+                    Polynomial p = new Polynomial(iterator.getRightStatement().rawcode, false);
                     this.upperBound.divide(p);
                     // System.out.println("-------" + this.lowerBound + "|" + this.upperBound + "-------");
                     
                 } else if (comp.equals(">=")) {
-                    this.lowerBound = new Polynomial(new Term(new Fraction(Integer.valueOf(c.getRightStatement().rawCode))));
-                    this.upperBound = new Polynomial(lowerB.getRightStatement().rawCode, false);
-                    Polynomial p = new Polynomial(iterator.getRightStatement().rawCode, false);
+                    this.lowerBound = new Polynomial(new Term(new Fraction(Integer.valueOf(c.getRightStatement().rawcode))));
+                    this.upperBound = new Polynomial(lowerB.getRightStatement().rawcode, false);
+                    Polynomial p = new Polynomial(iterator.getRightStatement().rawcode, false);
                     this.upperBound.divide(p);
                     // System.out.println("-------" + this.lowerBound + "|" + this.upperBound + "-------");
                 
@@ -214,15 +214,15 @@ public class ForLoop extends Statement {
             } else if (assignment.equals("/=")) {
                 String comp = c.getComparator().trim();
                 if (comp.equals(">")) {
-                    this.lowerBound = new Polynomial(c.getRightStatement().rawCode, false);
+                    this.lowerBound = new Polynomial(c.getRightStatement().rawcode, false);
                     this.lowerBound.add(new Polynomial(new Term(new Fraction(1))));
                     //this.upperBound = new Polynomial(lowerB.getRightStatement().rawCode);
                     throw new UnsupportedOperationException("LOGS NOT SUPPORTED YET!");
                     // System.out.println("-------" + this.lowerBound + "|" + this.upperBound + "-------");
                     
                 } else if (comp.equals(">=")) {
-                    this.lowerBound = new Polynomial(new Term(new Fraction(Integer.valueOf(c.getRightStatement().rawCode))));
-                    this.upperBound = new Polynomial(lowerB.getRightStatement().rawCode, false);
+                    this.lowerBound = new Polynomial(new Term(new Fraction(Integer.valueOf(c.getRightStatement().rawcode))));
+                    this.upperBound = new Polynomial(lowerB.getRightStatement().rawcode, false);
                     // System.out.println("-------" + this.lowerBound + "|" + this.upperBound + "-------");
                 
                 } else {
@@ -244,7 +244,7 @@ public class ForLoop extends Statement {
     private Condition findMatchingCondition(String s) {
         ArrayList<Condition> conditions = this.stoppingCondition.getConditions();
         for (int i = 0; i < conditions.size(); i++) {
-            if (s.equals(conditions.get(i).getLeftStatement().rawCode))
+            if (s.equals(conditions.get(i).getLeftStatement().rawcode))
                 return conditions.get(i);
         }
         return null;
@@ -255,7 +255,7 @@ public class ForLoop extends Statement {
         AssignmentStatement[] iterations = this.iterationStatements;
         int length = iterations.length;
         for (int i = 0; i < length; i++) {
-            if (iterations[i].getLeftStatement().rawCode.equals(s)) {
+            if (iterations[i].getLeftStatement().rawcode.equals(s)) {
                 return iterations[i];
             }    
         }

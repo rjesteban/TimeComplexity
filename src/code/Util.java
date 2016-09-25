@@ -115,9 +115,12 @@ public class Util {
                 }
             }
             
+            else if (s.trim().startsWith("{") && s.trim().endsWith("}")) {
+                splitShizz.add(new Scope(s));
+            }
+            
            // else if assignment
             else {
-                //System.out.println("assignment: " + s);
                 splitShizz.add(new AssignmentStatement(s));
             }
             

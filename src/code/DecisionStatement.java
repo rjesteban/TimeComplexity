@@ -15,14 +15,13 @@ import math.Polynomial;
 public class DecisionStatement extends Statement {
     private ArrayList<Condition> conditions;
     private String bodyCode;
-    private ArrayList<Statement> body;
     private ArrayList<String> elseifs;
     
     
     public DecisionStatement(String code, String body) {
         this.elseifs = new ArrayList<String>();
         this.conditions = new ArrayList<Condition>();
-        this.rawCode = code.trim();
+        this.rawcode = code.trim();
         this.bodyCode = body;
         this.parseComparison();
         this.setTime();
@@ -33,7 +32,7 @@ public class DecisionStatement extends Statement {
     
     
     private void parseComparison() {
-        String[] _conditions = this.rawCode.trim().split("(&&)|(\\|\\|)");
+        String[] _conditions = this.rawcode.trim().split("(&&)|(\\|\\|)");
         for (String condition: _conditions){
             conditions.add(new Condition(condition.trim()));
         }
@@ -41,11 +40,20 @@ public class DecisionStatement extends Statement {
 
     @Override
     public void setTime() {
-        Polynomial p = new Polynomial();
+        Polynomial ifstmt = new Polynomial();
+        System.out.println("timeinit: " + ifstmt);
         for (int i = 0; i < this.conditions.size(); i++) {
-            p.add(this.conditions.get(i).getTime());
+            System.out.println("000");
+            ifstmt.add(this.conditions.get(i).getTime());
         }
-        this.time = new Polynomial(p);
+        System.out.println("timebef: " + ifstmt);
+        if (!this.bodyCode.equals("{}")) {
+            ArrayList<Statement> ifbody = Util.split(this.bodyCode);
+            for (Statement ifbodystatement: ifbody)
+                ifstmt.add(ifbodystatement.getTime());
+            System.out.println("time: " + ifstmt);
+        }
+        this.time = new Polynomial(ifstmt);
     }
 
 }
