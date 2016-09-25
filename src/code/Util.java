@@ -66,29 +66,52 @@ public class Util {
             
             //====================GONNA FIX THIS IF SHIZZ====================
             else if(s.trim().startsWith("if(") || s.trim().startsWith("if (")) {
-//                Pattern paren = Pattern.compile("\\((.*)\\)\\s*\\{{0,1}?(.*)\\}?");
-                System.out.println("what if: " + s);
                 Pattern paren = Pattern.compile("\\s*if\\s*\\(([^\\)]*)\\)\\s*\\{{0,1}?(.*)\\}?");
                 Matcher matchIf = paren.matcher(s);
                 if (matchIf.matches()){
-                    System.out.println("if : " + matchIf.group(1));
-                    System.out.println("cond : " + matchIf.group(2));
                     splitShizz.add(new DecisionStatement(matchIf.group(1), matchIf.group(2)));
                 }
             }
             
             else if(s.trim().startsWith("else if(") || s.trim().startsWith("else if (")) {
-//                Pattern paren = Pattern.compile("\\((.*)\\)\\s*\\{{0,1}?(.*)\\}?");
-                System.out.println("what if: " + s);
-                Pattern paren = Pattern.compile("\\s*else if\\s*\\(([^\\)]*)\\)\\s*\\{{0,1}?(.*)\\}?");
+                Pattern paren = Pattern.compile("\\s*else\\s*if\\s*\\(([^\\)]*)\\)\\s*\\{{0,1}?(.*)\\}?");
                 Matcher matchIf = paren.matcher(s);
                 if (matchIf.matches()){
-                    System.out.println("if : " + matchIf.group(1));
-                    System.out.println("cond : " + matchIf.group(2));
-                    //splitShizz.get(new DecisionStatement(matchIf.group(1), matchIf.group(2)));
-                    DecisionStatement cond = (DecisionStatement)splitShizz.get(splitShizz.size()-1);
-                    System.out.println("yes: " + matchIf.group(1) + matchIf.group(2));
-                    cond.getelseIfs().add(matchIf.group(1) + matchIf.group(2));
+                    DecisionStatement prevDec = (DecisionStatement)splitShizz.get(splitShizz.size()-1);
+                     
+                    String[] conds = matchIf.group(1).split("\\|\\||\\&\\&");
+                    String conditionals = "";
+                    String decBodystatements = "";
+                    for (String condi: conds) {
+                        conditionals += condi.trim() + ";";
+                    }
+                    if(matchIf.group(2).trim().startsWith("{") && matchIf.group(2).trim().endsWith("}")) {
+                        prevDec.getelseIfs().add( conditionals +
+                                matchIf.group(2).trim().substring(1, matchIf.group(2).length()-1)
+                        );
+                    }
+                    else {
+                        prevDec.getelseIfs().add( conditionals +
+                                matchIf.group(2).trim() + ";"
+                        );
+                    }
+                }
+            }
+            
+            else if(s.trim().startsWith("else") || s.trim().startsWith("else")) {
+                Pattern paren = Pattern.compile("\\s*(else)\\s*\\{{0,1}?(.*)\\}?");
+                Matcher matchIf = paren.matcher(s);
+                if (matchIf.matches()){
+
+                    DecisionStatement prevDec = (DecisionStatement)splitShizz.get(splitShizz.size()-1);
+                    
+                    if(matchIf.group(2).trim().startsWith("{") && matchIf.group(2).trim().endsWith("}"))
+                        prevDec.getelseIfs().add(
+                                matchIf.group(2).trim().substring(1, matchIf.group(2).length()-1)
+                        );
+                    else
+                        prevDec.getelseIfs().add(matchIf.group(2).trim() + ";");
+                        
                 }
             }
             
