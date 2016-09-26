@@ -3,6 +3,7 @@ package code;
 
 import java.util.ArrayList;
 import math.Fraction;
+import math.Logarithm;
 import math.Polynomial;
 import math.Term;
 import math.Variable;
@@ -242,7 +243,26 @@ public class ForLoop extends Statement {
                     this.time = new Polynomial();
                 }
             } else if (assignment.equals("*=")) {
-                System.out.println("*= siya");
+                String comp = c.getComparator().trim();
+                if (comp.equals("<") || comp.equals("<=")) {
+                    
+                    
+                    this.lowerBound = new Polynomial(lowerB.getRightStatement().rawcode, false);
+                    this.upperBound = new Polynomial(c.getRightStatement().rawcode, false);
+                    Polynomial p = new Polynomial(iterator.getRightStatement().rawcode, false);
+                    
+                    
+                    this.lowerBound = new Polynomial(lowerB.getRightStatement().rawcode, false);
+                    Fraction b = new Fraction(Integer.valueOf(iterator.getRightStatement().rawcode.trim()));
+                    Polynomial x = new Polynomial(c.getRightStatement().rawcode, true);
+ 
+                    Logarithm sl = new Logarithm(b, x);
+                    this.upperBound = new Polynomial(sl.copy());
+
+                    
+                } else {
+                    this.time = new Polynomial();
+                }
                 
                 
                 
@@ -252,8 +272,16 @@ public class ForLoop extends Statement {
                 if (comp.equals(">")) {
                     this.lowerBound = new Polynomial(c.getRightStatement().rawcode, false);
                     this.lowerBound.add(new Polynomial(new Term(new Fraction(1))));
-                    //this.upperBound = new Polynomial(lowerB.getRightStatement().rawCode);
-                    throw new UnsupportedOperationException("LOGS NOT SUPPORTED YET!");
+                    
+                    Fraction b = new Fraction(Integer.valueOf(iterator.getRightStatement().rawcode.trim()));
+                    Polynomial x = new Polynomial(lowerB.getRightStatement().rawcode, true);
+                    
+                    Logarithm l = new Logarithm(b, x);
+                    
+                    
+                    this.upperBound = new Polynomial(l);
+                    
+//                    throw new UnsupportedOperationException("LOGS NOT SUPPORTED YET!");
                     // System.out.println("-------" + this.lowerBound + "|" + this.upperBound + "-------");
                     
                 } else if (comp.equals(">=")) {
@@ -282,9 +310,6 @@ public class ForLoop extends Statement {
         for (int i = 0; i < conditions.size(); i++) {
             String match = conditions.get(i).getLeftStatement().rawcode.trim();
             
-            if (match.contains("*"))
-                System.out.println(match);
-            
             if (s.contains(String.valueOf(
                     conditions.get(i).getLeftStatement().rawcode.trim().
                             replaceAll("\\*|\\+|\\-|\\/", "").charAt(0)
@@ -311,7 +336,8 @@ public class ForLoop extends Statement {
     @Override
     public void setTime() {
         if (upperBound != null && lowerBound != null && this.time == null) {
-            Polynomial p = new Polynomial(upperBound);
+//            Polynomial p = new Polynomial(upperBound.copy());
+            Polynomial p = new Polynomial(this.upperBound);
             p.subtract(lowerBound);
             p.add(new Polynomial(new Term(new Fraction(1))));
             p.multiply(this.insideCount);

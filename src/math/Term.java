@@ -29,6 +29,12 @@ public class Term {
         this.TYPE = "norm";
     }
     
+    public Term(Fraction coef, ArrayList<Variable> var) {
+        this.coefficient = coef.copy();
+        this.variable = Term.copyvars(var);
+        this.TYPE = "norm";
+    }
+    
     public Term copy() {
         Term m = new Term();
         m.coefficient = this.coefficient.copy();
@@ -99,6 +105,7 @@ public class Term {
     public Term plus(Term t) {
         Term m = new Term();
         if (this.isLike(t)) {
+            m = this.copy();
             Fraction f = this.coefficient.plus(t.getCoefficient());
             m.coefficient = f;
         }
@@ -106,8 +113,9 @@ public class Term {
     }
 
     public boolean isLike(Term t) {
-        boolean b = this.variable.toString().equals(t.variable.toString());
-        return b;
+        boolean vars = this.variable.toString().equals(t.variable.toString());
+        boolean types = this.TYPE.equals(t.TYPE);
+        return vars && types;
     }
    
     public static void updateVars(ArrayList<Variable> vars) {
@@ -124,6 +132,13 @@ public class Term {
             }
         }
         
+        for (int i = 0; i < clonedVars.size(); i++) {
+            if (clonedVars.get(i).getExponent().equals(new Fraction(0))){
+                clonedVars.remove(i);
+                i--;
+            }
+        }
+        
         vars.clear();
         for (Variable V: clonedVars)
             vars.add(new Variable(V.getVariable(), V.getExponent().copy()));
@@ -134,6 +149,20 @@ public class Term {
         for (Variable v: array)
            variables.add(v);
         return variables;
+    }
+    
+    public static void main(String[] args) {
+        ArrayList<Variable> vars = new ArrayList<>();
+        vars.add(new Variable("x", new Fraction(4)));
+        Term t1 = new Term(new Fraction(3), vars);
+        Term t2 = new Term(new Fraction(1));
+        
+        Polynomial p = new Polynomial(t1);
+        Polynomial p2 = new Polynomial(t2);
+        
+        p.add(p2);
+        System.out.println("p: " + p);
+        
     }
     
 }

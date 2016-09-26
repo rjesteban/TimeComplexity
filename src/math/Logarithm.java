@@ -5,6 +5,8 @@
  */
 package math;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author rj
@@ -22,11 +24,19 @@ public class Logarithm extends Term{
         this.TYPE = "log";
     }
     
+    public Logarithm(Term m, Fraction base, Polynomial x) {
+        this.b = base.copy();
+        this.x = x.copy();
+        this.coefficient = m.coefficient.copy();
+        this.variable = Term.copyvars(m.variable);
+        this.TYPE = "log";
+    }
+    
     public Logarithm(){
         super();
         this.TYPE = "log";
     }
-    
+        
   
     public Fraction getB() { return b; }
     public void setB(Fraction b) { this.b = b.copy();}
@@ -45,7 +55,12 @@ public class Logarithm extends Term{
     @Override
     public Logarithm times(Term m) {
         Logarithm log = this.copy();
-        super.times(m);
+        Term prod = super.times(m);
+        log.variable = Term.copyvars(prod.variable);
+        log.coefficient = prod.coefficient.copy();
+        
+        if (m.TYPE.equals("log"))
+            System.out.println("its a looog");
         
         
         return log;
@@ -53,16 +68,30 @@ public class Logarithm extends Term{
     
     @Override
     public String toString() {
-        return super.toString() + "log(" + this.b + ")" + this.x;
+        return super.toString() + "log[" + this.b + "](" + this.x + ")";
     }
 
     
     public static void main(String[] args) {
-        Logarithm logn = new Logarithm(new Fraction(2), new Polynomial("n", true));
-        Polynomial m = new Polynomial("m", false);
+        ArrayList<Variable> var = new ArrayList<Variable>();
+        var.add(new Variable("g", new Fraction(3)));
         
-        Logarithm prod = logn.times(m.getTerms().get(0));
-        System.out.println("prod: " + prod);
+        Term t = new Term(new Fraction(3), var);
+        Logarithm logn = new Logarithm(t, new Fraction(2), new Polynomial("n", true));
+                        
+        Polynomial m = new Polynomial("6*m", false);
+        Polynomial prod = new Polynomial(logn);
+        Polynomial m2 = new Polynomial("6*m", false);
+        Polynomial prod2 = new Polynomial(logn);
+        Polynomial prod3 = new Polynomial(logn);
+        Polynomial prod4 = new Polynomial(logn);
+        prod.multiply(m);
+        m2.multiply(prod2);
+        prod3.multiply(prod);
+
+        System.out.println("prod : " + prod);
+        System.out.println("   m2: " + m2);
+        System.out.println("prod3: " + prod3);
     }
 
     

@@ -37,8 +37,11 @@ public class Polynomial {
         
         for (int i = 0; i < this.terms.size(); i++) {
             for (int j = 0; j < p.terms.size(); j++) {
-                Term t = this.terms.get(i).copy().times(p.terms.get(j).copy());
-                product.add(t);
+                if (this.terms.get(i).TYPE.equals("log")) {
+                    product.add(this.terms.get(i).copy().times(p.terms.get(j).copy()));
+                } else { // no support yet from mult sa term so balihon
+                    product.add(p.terms.get(j).copy().times(this.terms.get(i).copy()));
+                }
             }
         }
         
@@ -66,15 +69,23 @@ public class Polynomial {
     
     
     public void simplify() {
+        
         for (int i = 0; i < this.terms.size(); i++) {
             for (int j = i + 1; j < this.terms.size(); j++) {
                 if (this.terms.get(i).isLike(this.terms.get(j))) {
+                    Term t = this.terms.get(i).copy().plus(this.terms.get(j)).copy();
                     this.terms.set(i, this.terms.get(i).plus(this.terms.get(j)).copy());
                     this.terms.remove(j);
-                    if (this.terms.get(i).getCoefficient().equals(new Fraction(0)) && !this.terms.get(i).getVariable().isEmpty())
+                    if (this.terms.get(i).getCoefficient().equals(new Fraction(0)) && !this.terms.get(i).getVariable().isEmpty()) {
                         this.terms.remove(i);
+                        i--;
+                    }
                 }
             }
+        }
+       
+        if (this.terms.isEmpty()) {
+            this.add(new Polynomial(new Term(new Fraction(0))));
         }
     }
     
@@ -96,7 +107,7 @@ public class Polynomial {
       
 
     //if the input is a polynomial expression represented as an infix string
-    public Polynomial (String string, boolean keepConstants) {
+    public Polynomial (String string, boolean removeConstants) {
         string = string.replaceAll("\\s", "");
         String[] sterms = string.split(String.format(Statement.WITH_DELIMITER, "\\+|\\-"));
         this.terms = new ArrayList<Term>();
@@ -106,7 +117,7 @@ public class Polynomial {
             // if it is a term. evaluate and add it
             if (!(s.equals("+") || s.equals("-"))) {
                 Term t = new Term();
-                t.setCoefficient(new Fraction(1));
+                
 
                 String[] comp = s.split(String.format(Statement.WITH_DELIMITER, "\\*|\\/"));
                 boolean prevIsDiv = false;
@@ -130,6 +141,8 @@ public class Polynomial {
                     } else if (comp1.charAt(0) == '*') {
                         prevIsMult = true;
                     } else if (comp1.charAt(0) >= 'a' && comp1.charAt(0) <= 'z') {
+                        if(!(s.charAt(0) >= '0' && s.charAt(0) <= '9'))
+                            t.setCoefficient(new Fraction(1));
                         if (prevIsDiv) {
                             t.getVariable().add(new Variable(comp1, new Fraction(-1)));
                             prevIsDiv = false;
@@ -162,6 +175,16 @@ public class Polynomial {
             } else if (s.equals("-")) {
                 prevIsSubt = true;
 
+            }
+        }
+        simplify();
+        
+        if (removeConstants) {
+            for (int i = 0; i < this.terms.size(); i++) {
+                if(this.terms.get(i).variable.isEmpty()) {
+                    this.terms.remove(i);
+                    i--;
+                }
             }
         }
     }
@@ -199,20 +222,11 @@ public class Polynomial {
     }
     
     public static void main(String[] args) {
-        Polynomial o = new Polynomial("1/n", false);
-        o.simplify();
-        System.out.println("ooooo: " + o);
-        Polynomial n = new Polynomial("7", false);
-        Polynomial m = new Polynomial("n*n*n*n", false);
-        n.divide(m);
-        System.out.println("P: " + n);   
-        String s = "";
-        System.out.println(">>>" + s.length() + " | " + s.equals(""));
+        Polynomial p = new Polynomial("3*n*n/n/n+3*n + 5", false);
+        System.out.println("p: " + p);
         
-        {
-            String w = "l";
-        }
-        
+        Polynomial p2 = new Polynomial("3*n-2*n", false);
+        System.out.println("p: " + p2);
     }
     
     public static ArrayList<Term> copyterms(ArrayList<Term> array) {
